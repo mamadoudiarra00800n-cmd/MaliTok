@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaliTok</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080808;color:white;font-family:Arial}
+header{height:60px;background:#111;display:flex;
+align-items:center;justify-content:space-between;padding:15px}
+.logo{font-size:25px;font-weight:bold;color:#ff3155}
+.video{height:calc(100vh - 120px);display:flex;
+align-items:center;justify-content:center;background:#202020;
+text-align:center;flex-direction:column;gap:18px}
+.video h2{font-size:27px}
+.video p{color:#ccc}
+.upload{background:#ff3155;color:white;padding:14px 22px;
+border:0;border-radius:25px;font-size:16px}
+nav{height:60px;background:#111;display:flex;
+justify-content:space-around;align-items:center}
+nav span{font-size:14px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">🇲🇱 MaliTok</div>
+<div>👤 Profil</div>
+</header>
+<div class="video">
+<div style="font-size:65px">🎬</div>
+<h2>Bienvenue sur MaliTok !</h2>
+<p>La vidéo du Mali commence ici.</p>
+<p>Partage tes vidéos avec le monde entier.</p>
+<label class="upload">
+Publier une vidéo
+<input type="file" accept="video/*" hidden
+onchange="alert('Vidéo sélectionnée !')">
+</label>
+</div>
+<nav>
+<span>🏠 Accueil</span>
+<span>🔍 Découvrir</span>
+<span>➕ Publier</span>
+<span>❤️ J'aime</span>
+<span>👤 Profil</span>
+</nav>
+</body>
+</html>
