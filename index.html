@@ -1,49 +1,145 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MaliTok</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MaliTok 🇲🇱</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#080808;color:white;font-family:Arial}
-header{height:60px;background:#111;display:flex;
-align-items:center;justify-content:space-between;padding:15px}
-.logo{font-size:25px;font-weight:bold;color:#ff3155}
-.video{height:calc(100vh - 120px);display:flex;
-align-items:center;justify-content:center;background:#202020;
-text-align:center;flex-direction:column;gap:18px}
-.video h2{font-size:27px}
-.video p{color:#ccc}
-.upload{background:#ff3155;color:white;padding:14px 22px;
-border:0;border-radius:25px;font-size:16px}
-nav{height:60px;background:#111;display:flex;
-justify-content:space-around;align-items:center}
-nav span{font-size:14px}
+body{background:#000;color:white;font-family:Arial}
+header{
+position:fixed;top:0;width:100%;height:55px;
+background:#111;display:flex;align-items:center;
+justify-content:space-between;padding:0 15px;z-index:10
+}
+.logo{color:#ff3155;font-size:24px;font-weight:bold}
+.feed{
+height:100vh;overflow-y:auto;
+scroll-snap-type:y mandatory
+}
+.post{
+height:100vh;position:relative;
+display:flex;align-items:center;
+justify-content:center;background:#202020;
+scroll-snap-align:start
+}
+.post video{
+width:100%;height:100%;object-fit:contain
+}
+.info{
+position:absolute;bottom:85px;left:15px;
+right:75px;text-shadow:1px 1px 4px black
+}
+.actions{
+position:absolute;right:12px;bottom:110px;
+display:flex;flex-direction:column;gap:25px;
+align-items:center
+}
+.actions button{
+background:none;border:0;color:white;
+font-size:27px;cursor:pointer
+}
+.actions small{font-size:12px}
+nav{
+position:fixed;bottom:0;width:100%;height:60px;
+background:#111;display:flex;
+justify-content:space-around;align-items:center;
+z-index:10
+}
+nav button{background:none;color:white;
+border:0;font-size:13px}
+.upload{
+background:#ff3155;color:white;
+padding:12px 18px;border-radius:25px;
+border:0;font-weight:bold
+}
+#picker{display:none}
+.empty{font-size:20px;text-align:center;padding:20px}
 </style>
 </head>
 <body>
+
 <header>
 <div class="logo">🇲🇱 MaliTok</div>
 <div>👤 Profil</div>
 </header>
-<div class="video">
+
+<main class="feed" id="feed">
+<div class="post">
+<div class="empty">
 <div style="font-size:65px">🎬</div>
 <h2>Bienvenue sur MaliTok !</h2>
-<p>La vidéo du Mali commence ici.</p>
-<p>Partage tes vidéos avec le monde entier.</p>
-<label class="upload">
-Publier une vidéo
-<input type="file" accept="video/*" hidden
-onchange="alert('Vidéo sélectionnée !')">
-</label>
+<p style="margin:15px">La vidéo du Mali commence ici.</p>
+<p>Publie ta première vidéo ! 🇲🇱</p>
 </div>
+</div>
+</main>
+
+<div style="position:fixed;top:65px;right:12px;z-index:11">
+<button class="upload" onclick="document.getElementById('picker').click()">
+➕ Publier
+</button>
+<input id="picker" type="file" accept="video/*" multiple>
+</div>
+
 <nav>
-<span>🏠 Accueil</span>
-<span>🔍 Découvrir</span>
-<span>➕ Publier</span>
-<span>❤️ J'aime</span>
-<span>👤 Profil</span>
+<button onclick="window.scrollTo(0,0)">🏠 Accueil</button>
+<button onclick="document.getElementById('picker').click()">➕ Publier</button>
+<button onclick="alert('Profil MaliTok')">👤 Profil</button>
 </nav>
+
+<script>
+const picker=document.getElementById('picker');
+const feed=document.getElementById('feed');
+
+picker.addEventListener('change',function(){
+const files=Array.from(this.files);
+files.forEach(file=>{
+if(!file.type.startsWith('video/'))return;
+
+const url=URL.createObjectURL(file);
+const post=document.createElement('section');
+post.className='post';
+
+post.innerHTML=`
+<video src="${url}" controls loop playsinline></video>
+<div class="info">
+<strong>🇲🇱 Utilisateur MaliTok</strong>
+<p>${file.name}</p>
+</div>
+<div class="actions">
+<button class="like">❤️<small>0</small></button>
+<button class="comment">💬<small>Commenter</small></button>
+<button class="share">↗️<small>Partager</small></button>
+</div>`;
+
+const like=post.querySelector('.like');
+let count=0;
+like.onclick=()=>{
+count++;
+like.innerHTML='❤️<small>'+count+'</small>';
+};
+
+post.querySelector('.comment').onclick=()=>{
+const message=prompt('Écris ton commentaire :');
+if(message)alert('Commentaire ajouté : '+message);
+};
+
+post.querySelector('.share').onclick=()=>{
+if(navigator.share){
+navigator.share({title:'MaliTok',text:'Regarde cette vidéo !',url:location.href});
+}else{
+alert('Partage non disponible sur ce téléphone.');
+}
+};
+
+feed.appendChild(post);
+});
+this.value='';
+});
+</script>
+
 </body>
 </html>
+
