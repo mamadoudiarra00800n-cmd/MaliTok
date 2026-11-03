@@ -88,62 +88,60 @@ border:0;font-weight:bold
 <button onclick="alert('Profil MaliTok')">👤 Profil</button>
 </nav>
 
-<script>
-const picker=document.getElementById('picker');
-const feed=document.getElementById('feed');
 
-picker.addEventListener('change',function(){
-const files=Array.from(this.files);
-files.forEach(file=>{
-if(!file.type.startsWith('video/') && !file.name.match(/\.(mp4|webm|mov|m4v|3gp)$/i)){
-alert("Ce fichier n'est pas une vidéo compatible.");
-return;
+<script>
+const picker = document.getElementById('picker');
+const feed = document.getElementById('feed');
+
+picker.addEventListener('change', function () {
+  const file = picker.files && picker.files[0];
+
+  if (!file) {
+    alert("MaliTok n'a reçu aucune vidéo.");
+    return;
   }
 
-const url=URL.createObjectURL(file);
-const post=document.createElement('section');
-post.className='post';
+  if (!file.type.startsWith('video/') &&
+      !/\.(mp4|webm|mov|m4v|3gp)$/i.test(file.name)) {
+    alert("Choisis une vidéo MP4.");
+    return;
+  }
 
-post.innerHTML=`
-<video src="${url}" controls loop playsinline></video>
-<div class="info">
-<strong>🇲🇱 Utilisateur MaliTok</strong>
-<p>${file.name}</p>
-</div>
-<div class="actions">
-<button class="like">❤️<small>0</small></button>
-<button class="comment">💬<small>Commenter</small></button>
-<button class="share">↗️<small>Partager</small></button>
-</div>`;
+  const url = URL.createObjectURL(file);
 
-const like=post.querySelector('.like');
-let count=0;
-like.onclick=()=>{
-count++;
-like.innerHTML='❤️<small>'+count+'</small>';
-};
+  const empty = feed.querySelector('.empty');
+  if (empty) empty.parentElement.remove();
 
-post.querySelector('.comment').onclick=()=>{
-const message=prompt('Écris ton commentaire :');
-if(message)alert('Commentaire ajouté : '+message);
-};
+  const post = document.createElement('section');
+  post.className = 'post';
 
-post.querySelector('.share').onclick=()=>{
-if(navigator.share){
-navigator.share({title:'MaliTok',text:'Regarde cette vidéo !',url:location.href});
-}else{
-alert('Partage non disponible sur ce téléphone.');
-}
-};
+  const video = document.createElement('video');
+  video.src = url;
+  video.controls = true;
+  video.loop = true;
+  video.playsInline = true;
+  video.preload = 'metadata';
 
-const empty = feed.querySelector('.empty');
-if(empty) empty.parentElement.remove();
+  const info = document.createElement('div');
+  info.className = 'info';
+  info.textContent = '🇲🇱 Utilisateur MaliTok — ' + file.name;
 
-feed.appendChild(post);
-});
-this.value='';
+  post.appendChild(video);
+  post.appendChild(info);
+  feed.appendChild(post);
+
+  video.addEventListener('error', function () {
+    alert("La vidéo a été sélectionnée, mais son format ne peut pas être lu.");
+  });
+
+  post.scrollIntoView({ behavior: 'smooth' });
+
+  alert("Vidéo ajoutée ! Appuie sur Lecture si nécessaire.");
+
+  picker.value = '';
 });
 </script>
+
 
 </body>
 </html>
