@@ -136,6 +136,9 @@ alert('Partage non disponible sur ce téléphone.');
 }
 };
 
+const empty = feed.querySelector('.empty');
+if(empty) empty.parentElement.remove();
+
 feed.appendChild(post);
 });
 this.value='';
